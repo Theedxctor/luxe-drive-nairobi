@@ -1,11 +1,30 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, Briefcase, Mountain, ArrowRight } from 'lucide-react';
+import { Users, Briefcase, Bus, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import sClassImage from '@/assets/s-class.jpg';
-import gleImage from '@/assets/gle.jpg';
+
+// Executive SUVs
+import landCruiserLc200Image from '@/assets/land-cruiser-lc200.jpg';
+import landCruiserLc300Image from '@/assets/land-cruiser-lc300.jpg';
+import landCruiserPradoImage from '@/assets/land-cruiser-prado.jpg';
 import lx570Image from '@/assets/lx570.jpg';
+import mercedesGlcImage from '@/assets/mercedes-glc.jpg';
 import gWagonImage from '@/assets/g-wagon.jpg';
+import rangeRoverVogueImage from '@/assets/range-rover-vogue.jpg';
+import porscheCayenneImage from '@/assets/porsche-cayenne.jpg';
+import bmwX6Image from '@/assets/bmw-x6.jpg';
+
+// Luxury Sedans
+import sClassImage from '@/assets/s-class.jpg';
+import mercedesC200Image from '@/assets/mercedes-c200.jpg';
+import toyotaCrownImage from '@/assets/toyota-crown.jpg';
+import toyotaMarkXImage from '@/assets/toyota-mark-x.jpg';
+import audiA6Image from '@/assets/audi-a6.jpg';
+
+// Executive Vans & Transfers
+import toyotaAlphardImage from '@/assets/toyota-alphard.jpg';
+import mercedesVClassImage from '@/assets/mercedes-v-class.jpg';
+import mercedesSprinterImage from '@/assets/mercedes-sprinter.jpg';
 
 const Fleet = () => {
   const categories = [
@@ -15,20 +34,76 @@ const Fleet = () => {
       icon: Briefcase,
       vehicles: [
         {
-          name: 'Mercedes G-Wagon',
-          image: gWagonImage,
-          seats: '5 Passengers',
-          style: 'Iconic Luxury',
-          occasions: 'VIP Events, Executive Travel',
-          features: ['Premium Leather', 'Advanced Safety', 'All-Terrain Capable']
+          name: 'Toyota Land Cruiser LC200',
+          image: landCruiserLc200Image,
+          seats: '8 Passengers',
+          style: 'Legendary Durability',
+          occasions: 'Safari Luxury, VIP Events, Corporate Travel',
+          features: ['V8 Engine', 'Off-Road Capable', 'Premium Interior']
+        },
+        {
+          name: 'Toyota Land Cruiser LC300',
+          image: landCruiserLc300Image,
+          seats: '8 Passengers', 
+          style: 'Modern Excellence',
+          occasions: 'Executive Travel, Safari Tours, Airport Transfers',
+          features: ['Hybrid Engine', 'Advanced Safety', 'Luxury Comfort']
+        },
+        {
+          name: 'Toyota Land Cruiser Prado J150',
+          image: landCruiserPradoImage,
+          seats: '7 Passengers',
+          style: 'Versatile Luxury',
+          occasions: 'Corporate Events, Family Travel, Safari Adventures',
+          features: ['All-Terrain Ready', 'Premium Sound', 'Spacious Interior']
         },
         {
           name: 'Lexus LX 570',
           image: lx570Image,
           seats: '8 Passengers',
           style: 'Refined Power',
-          occasions: 'Airport Transfers, Corporate Events',
+          occasions: 'Airport Transfers, Corporate Events, VIP Travel',
           features: ['Spacious Interior', 'Premium Sound', 'Superior Comfort']
+        },
+        {
+          name: 'Mercedes GLC',
+          image: mercedesGlcImage,
+          seats: '5 Passengers',
+          style: 'Compact Luxury',
+          occasions: 'Business Meetings, City Travel, Airport Transfers',
+          features: ['Premium Technology', 'Efficient Performance', 'Elegant Design']
+        },
+        {
+          name: 'Mercedes G-Wagon',
+          image: gWagonImage,
+          seats: '5 Passengers',
+          style: 'Iconic Luxury',
+          occasions: 'VIP Events, Executive Travel, Special Occasions',
+          features: ['Premium Leather', 'Advanced Safety', 'All-Terrain Capable']
+        },
+        {
+          name: 'Range Rover Vogue',
+          image: rangeRoverVogueImage,
+          seats: '5 Passengers',
+          style: 'British Elegance',
+          occasions: 'Executive Travel, Weddings, Corporate Events',
+          features: ['Air Suspension', 'Panoramic Roof', 'Luxury Interior']
+        },
+        {
+          name: 'Porsche Cayenne',
+          image: porscheCayenneImage,
+          seats: '5 Passengers',
+          style: 'Sports Luxury',
+          occasions: 'VIP Events, Business Travel, Special Occasions',
+          features: ['Sport Performance', 'Premium Interior', 'Advanced Technology']
+        },
+        {
+          name: 'BMW X6',
+          image: bmwX6Image,
+          seats: '5 Passengers',
+          style: 'Athletic Luxury',
+          occasions: 'Executive Travel, Corporate Events, City Tours',
+          features: ['Dynamic Design', 'Premium Technology', 'Sport Performance']
         }
       ]
     },
@@ -42,23 +117,71 @@ const Fleet = () => {
           image: sClassImage,
           seats: '4 Passengers',
           style: 'Ultimate Luxury',
-          occasions: 'Business Meetings, Special Events',
+          occasions: 'Business Meetings, Special Events, Executive Travel',
           features: ['Massage Seats', 'Executive Rear', 'Premium Technology']
+        },
+        {
+          name: 'Mercedes C200',
+          image: mercedesC200Image,
+          seats: '5 Passengers',
+          style: 'Refined Elegance',
+          occasions: 'Business Travel, Airport Transfers, City Tours',
+          features: ['Premium Interior', 'Advanced Safety', 'Efficient Performance']
+        },
+        {
+          name: 'Toyota Crown',
+          image: toyotaCrownImage,
+          seats: '5 Passengers',
+          style: 'Executive Comfort',
+          occasions: 'Corporate Travel, Business Meetings, VIP Transport',
+          features: ['Spacious Interior', 'Premium Comfort', 'Reliable Performance']
+        },
+        {
+          name: 'Toyota Mark X',
+          image: toyotaMarkXImage,
+          seats: '5 Passengers',
+          style: 'Dynamic Luxury',
+          occasions: 'Business Travel, Corporate Events, Executive Transport',
+          features: ['Sport Performance', 'Premium Interior', 'Advanced Technology']
+        },
+        {
+          name: 'Audi A6',
+          image: audiA6Image,
+          seats: '5 Passengers',
+          style: 'German Precision',
+          occasions: 'Executive Travel, Business Meetings, Corporate Events',
+          features: ['Quattro Drive', 'Premium Technology', 'Luxury Interior']
         }
       ]
     },
     {
-      title: 'Adventure Luxury',
-      description: 'Luxury meets capability for every terrain',
-      icon: Mountain,
+      title: 'Executive Vans & Transfers',
+      description: 'Premium group transport and airport transfers',
+      icon: Bus,
       vehicles: [
         {
-          name: 'Mercedes GLE',
-          image: gleImage,
+          name: 'Toyota Alphard',
+          image: toyotaAlphardImage,
           seats: '7 Passengers',
-          style: 'Versatile Elegance',
-          occasions: 'Safari Tours, Family Events',
-          features: ['Off-Road Ready', 'Panoramic Roof', 'Premium Comfort']
+          style: 'Executive Van',
+          occasions: 'Airport Transfers, Group VIP, Family Events',
+          features: ['Spacious Interior', 'Premium Comfort', 'Electric Doors']
+        },
+        {
+          name: 'Mercedes V-Class',
+          image: mercedesVClassImage,
+          seats: '7 Passengers',
+          style: 'Luxury MPV',
+          occasions: 'Group Travel, Airport Transfers, Corporate Events',
+          features: ['Premium Interior', 'Advanced Safety', 'Flexible Seating']
+        },
+        {
+          name: 'Mercedes Sprinter',
+          image: mercedesSprinterImage,
+          seats: '12+ Passengers',
+          style: 'Premium Transport',
+          occasions: 'Airport Transfers, Group VIP, Corporate Shuttles',
+          features: ['High Capacity', 'Comfortable Seating', 'Luggage Space']
         }
       ]
     }
