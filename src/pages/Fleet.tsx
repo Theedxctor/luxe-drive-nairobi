@@ -197,22 +197,49 @@ const Fleet = () => {
       {categories.map((category, categoryIndex) => (
         <section key={categoryIndex} className="py-16 px-4">
           <div className="container mx-auto">
-            <div className="text-center mb-12">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <category.icon className="h-8 w-8 text-primary" />
-              </div>
-              <h2 className="text-4xl font-light text-foreground mb-4 font-serif">{category.title}</h2>
-              <p className="text-lg text-muted-foreground">{category.description}</p>
+          <div className="text-center mb-12">
+            <div 
+              className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6"
+              data-aos="fade-up"
+              data-aos-duration="600"
+            >
+              <category.icon className="h-8 w-8 text-primary" />
             </div>
+            <h2 
+              className="text-4xl font-light text-foreground mb-4 font-serif"
+              data-aos="fade-up"
+              data-aos-delay="100"
+              data-aos-duration="600"
+            >
+              {category.title}
+            </h2>
+            <p 
+              className="text-lg text-muted-foreground"
+              data-aos="fade-up"
+              data-aos-delay="200"
+              data-aos-duration="600"
+            >
+              {category.description}
+            </p>
+          </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
               {category.vehicles.map((vehicle, vehicleIndex) => (
-                <Card key={vehicleIndex} className="luxury-shadow hover:scale-105 luxury-transition bg-card border-border overflow-hidden">
+                <Card 
+                  key={vehicleIndex} 
+                  className="luxury-shadow hover:scale-105 luxury-transition bg-card border-border overflow-hidden"
+                  data-aos={vehicleIndex % 2 === 0 ? "fade-right" : "fade-left"}
+                  data-aos-delay={vehicleIndex * 100}
+                  data-aos-duration="800"
+                >
                   <div className="relative">
                     <img 
                       src={vehicle.image} 
                       alt={vehicle.name}
                       className="w-full h-64 object-cover"
+                      data-aos="zoom-in"
+                      data-aos-delay={vehicleIndex * 100 + 200}
+                      data-aos-duration="600"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   </div>

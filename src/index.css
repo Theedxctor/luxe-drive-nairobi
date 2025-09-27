@@ -106,4 +106,39 @@ All colors MUST be HSL.
   .luxury-button {
     @apply luxury-transition hover:scale-105 hover:gold-shadow;
   }
+
+  /* Custom AOS Animations for Luxury Theme */
+  [data-aos="fade-right"] {
+    transform: translate3d(-50px, 0, 0);
+    opacity: 0;
+  }
+  
+  [data-aos="fade-left"] {
+    transform: translate3d(50px, 0, 0);
+    opacity: 0;
+  }
+  
+  [data-aos="zoom-in"] {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  
+  [data-aos="fade-up"] {
+    transform: translate3d(0, 30px, 0);
+    opacity: 0;
+  }
+
+  /* Enhanced AOS Animation States */
+  [data-aos].aos-animate {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Luxury hover effects for animated elements */
+  [data-aos].aos-animate:hover {
+    transform: translate3d(0, -5px, 0) scale(1.02);
+    box-shadow: var(--shadow-gold);
+  }
 }
