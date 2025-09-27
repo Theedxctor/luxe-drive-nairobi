@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Send } from 'lucide-react';
+import { CalendarIcon, Send, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -30,8 +30,10 @@ const Quote = () => {
     specialRequests: ''
   });
 
-  const [pickupDate, setPickupDate] = useState<Date>();
-  const [dropoffDate, setDropoffDate] = useState<Date>();
+  const [pickupDate, setPickupDate] = useState<Date | undefined>();
+  const [dropoffDate, setDropoffDate] = useState<Date | undefined>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const cars = [
     'Mercedes G-Wagon',
@@ -40,29 +42,103 @@ const Quote = () => {
     'Lexus LX 570'
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    if (!formData.pickupLocation.trim()) newErrors.pickupLocation = 'Pickup location is required';
+    if (!formData.dropoffLocation.trim()) newErrors.dropoffLocation = 'Drop-off location is required';
+    if (!pickupDate) newErrors.pickupDate = 'Pickup date is required';
+    if (!dropoffDate) {
+      newErrors.dropoffDate = 'Drop-off date is required';
+    } else if (pickupDate && dropoffDate < pickupDate) {
+      newErrors.dropoffDate = 'Drop-off date must be after pickup date';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Create WhatsApp message
-    const message = `*Luxe Drive Quote Request*\n\n` +
-      `Name: ${formData.name}\n` +
-      `Phone: ${formData.phone}\n` +
-      `Email: ${formData.email}\n` +
-      `Pickup: ${formData.pickupLocation}\n` +
-      `Drop-off: ${formData.dropoffLocation}\n` +
-      `Pickup Date: ${pickupDate ? format(pickupDate, 'PPP') : 'Not selected'}\n` +
-      `Drop-off Date: ${dropoffDate ? format(dropoffDate, 'PPP') : 'Not selected'}\n` +
-      `Car: ${formData.car}\n` +
-      `With Driver: ${formData.withDriver === 'yes' ? 'Yes' : 'No'}\n` +
-      `Special Requests: ${formData.specialRequests || 'None'}`;
+    if (!validateForm()) {
+      toast({
+        title: 'Validation Error',
+        description: 'Please fill in all required fields correctly',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-    const whatsappUrl = `https://wa.me/254700000000?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    setIsSubmitting(true);
 
-    toast({
-      title: "Quote Request Sent!",
-      description: "You'll be redirected to WhatsApp to complete your request.",
-    });
+    try {
+      // Format dates
+      const formatDate = (date: Date) => format(date, 'EEEE, MMMM do yyyy');
+      const formatTime = (date: Date) => format(date, 'h:mm a');
+      
+      // Create WhatsApp message with better formatting
+      const message = `*LUXE DRIVE - QUOTE REQUEST*\n\n` +
+        `*Name:* ${formData.name}\n` +
+        `*Phone:* ${formData.phone}\n` +
+        `*Email:* ${formData.email}\n\n` +
+        `*PICKUP*\n` +
+        `📍 ${formData.pickupLocation}\n` +
+        `📅 ${formatDate(pickupDate!)}\n` +
+        `⏰ ${formatTime(pickupDate!)}\n\n` +
+        `*DROP-OFF*\n` +
+        `📍 ${formData.dropoffLocation}\n` +
+        `📅 ${formatDate(dropoffDate!)}\n` +
+        `⏰ ${formatTime(dropoffDate!)}\n\n` +
+        `*VEHICLE*\n` +
+        `🚗 ${formData.car}\n` +
+        `👨‍💼 With Driver: ${formData.withDriver === 'yes' ? 'Yes' : 'No'}\n\n` +
+        `*SPECIAL REQUESTS*\n` +
+        `${formData.specialRequests || 'None'}\n\n` +
+        `_Thank you for choosing Luxe Drive! We'll get back to you shortly._`;
+
+      const whatsappUrl = `https://wa.me/254796059968?text=${encodeURIComponent(message)}`;
+      
+      // Open WhatsApp in a new tab
+      window.open(whatsappUrl, '_blank');
+
+      // Show success message
+      toast({
+        title: 'Quote Request Sent!',
+        description: 'You\'ll be redirected to WhatsApp to complete your request.',
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        pickupLocation: '',
+        dropoffLocation: '',
+        car: '',
+        withDriver: 'yes',
+        specialRequests: ''
+      });
+      setPickupDate(undefined);
+      setDropoffDate(undefined);
+      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: 'Error',
+        description: 'There was an error processing your request. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -92,63 +168,90 @@ const Quote = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-card-foreground">Full Name *</Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    required
-                    className="bg-background border-border"
-                  />
+                  <div className="space-y-1">
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      required
+                      className={`bg-background border-border ${errors.name ? 'border-red-500' : ''}`}
+                      placeholder="e.g. John Doe"
+                    />
+                    {errors.name && (
+                      <p className="text-sm text-red-500">{errors.name}</p>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="text-card-foreground">Phone Number *</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    required
-                    placeholder="+254 7XX XXX XXX"
-                    className="bg-background border-border"
-                  />
+                  <div className="space-y-1">
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      required
+                      className={`bg-background border-border ${errors.phone ? 'border-red-500' : ''}`}
+                      placeholder="e.g. +254 796 059 968"
+                    />
+                    {errors.phone && (
+                      <p className="text-sm text-red-500">{errors.phone}</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-card-foreground">Email Address *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  required
-                  className="bg-background border-border"
-                />
+                <div className="space-y-1">
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    required
+                    className={`bg-background border-border ${errors.email ? 'border-red-500' : ''}`}
+                    placeholder="your.email@example.com"
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500">{errors.email}</p>
+                  )}
+                </div>
               </div>
 
               {/* Location Information */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="pickup" className="text-card-foreground">Pickup Location *</Label>
-                  <Input
-                    id="pickup"
-                    value={formData.pickupLocation}
-                    onChange={(e) => handleInputChange('pickupLocation', e.target.value)}
-                    required
-                    placeholder="e.g., JKIA Airport, Westlands"
-                    className="bg-background border-border"
-                  />
+                  <div className="space-y-1">
+                    <Input
+                      id="pickupLocation"
+                      value={formData.pickupLocation}
+                      onChange={(e) => handleInputChange('pickupLocation', e.target.value)}
+                      required
+                      className={`bg-background border-border ${errors.pickupLocation ? 'border-red-500' : ''}`}
+                      placeholder="e.g. Jomo Kenyatta International Airport"
+                    />
+                    {errors.pickupLocation && (
+                      <p className="text-sm text-red-500">{errors.pickupLocation}</p>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="dropoff" className="text-card-foreground">Drop-off Location *</Label>
-                  <Input
-                    id="dropoff"
-                    value={formData.dropoffLocation}
-                    onChange={(e) => handleInputChange('dropoffLocation', e.target.value)}
-                    required
-                    placeholder="e.g., Hotel, Business Center"
-                    className="bg-background border-border"
-                  />
+                  <div className="space-y-1">
+                    <Input
+                      id="dropoffLocation"
+                      value={formData.dropoffLocation}
+                      onChange={(e) => handleInputChange('dropoffLocation', e.target.value)}
+                      required
+                      className={`bg-background border-border ${errors.dropoffLocation ? 'border-red-500' : ''}`}
+                      placeholder="e.g. Westlands, Nairobi"
+                    />
+                    {errors.dropoffLocation && (
+                      <p className="text-sm text-red-500">{errors.dropoffLocation}</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -259,10 +362,20 @@ const Quote = () => {
 
               <Button 
                 type="submit" 
+                disabled={isSubmitting}
                 className="w-full luxury-button text-lg py-6 bg-primary hover:bg-primary/90 group"
               >
-                Send Quote Request
-                <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    Request Quote
+                    <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </Button>
             </form>
           </CardContent>

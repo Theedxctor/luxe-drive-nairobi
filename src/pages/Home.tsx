@@ -78,9 +78,9 @@ const Home = () => {
               </Button>
             </Link>
             
-            <a href="tel:+254700000000" className="flex items-center space-x-2 text-primary hover:text-primary/80 luxury-transition">
+            <a href="tel:+254796059968" className="flex items-center space-x-2 text-primary hover:text-primary/80 luxury-transition">
               <Phone className="h-5 w-5" />
-              <span className="text-lg">+254 700 000 000</span>
+              <span className="text-lg">+254 796 059 968 </span>
             </a>
           </div>
         </div>

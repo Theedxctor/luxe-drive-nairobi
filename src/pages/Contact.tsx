@@ -3,12 +3,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Phone, Mail, MapPin, Clock, MessageCircle, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, MessageCircle, Send, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import emailjs from '@emailjs/browser';
+
+// Initialize EmailJS with your public key
+emailjs.init('EukkOAeOWrJBSvGlg');
 
 const Contact = () => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,33 +22,99 @@ const Contact = () => {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Create WhatsApp message
-    const message = `*Contact Request - Luxe Drive*\n\n` +
-      `Name: ${formData.name}\n` +
-      `Email: ${formData.email}\n` +
-      `Phone: ${formData.phone}\n` +
-      `Subject: ${formData.subject}\n` +
-      `Message: ${formData.message}`;
+    // Basic form validation
+    if (!formData.name || !formData.email || !formData.phone || !formData.subject || !formData.message) {
+      toast({
+        title: 'Validation Error',
+        description: 'Please fill in all required fields',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-    const whatsappUrl = `https://wa.me/254700000000?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-    toast({
-      title: "Message Sent!",
-      description: "You'll be redirected to WhatsApp to complete sending your message.",
-    });
+    // Phone number validation (basic)
+    const phoneRegex = /^[0-9\-\+\(\)\s]{10,20}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      toast({
+        title: 'Invalid Phone Number',
+        description: 'Please enter a valid phone number',
+        variant: 'destructive',
+      });
+      return;
+    }
 
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    });
+    setIsLoading(true);
+
+    try {
+      // Format the message with all form data
+      const formattedMessage = `
+        Name: ${formData.name}
+        Email: ${formData.email}
+        Phone: ${formData.phone}
+        Subject: ${formData.subject}
+        
+        Message:
+        ${formData.message}
+      `;
+
+      // Send email using EmailJS
+      const templateParams = {
+        to_name: 'Luxe Drive Team',
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        subject: `New Contact: ${formData.subject}`,
+        message: formattedMessage,
+        reply_to: formData.email,
+        date: new Date().toLocaleString()
+      };
+
+      const result = await emailjs.send(
+        'service_3ch53k7', // Service ID
+        'template_ksjt2t8', // Template ID
+        templateParams,
+        'EukkOAeOWrJBSvGlg' // Public Key
+      );
+
+      // Show success message
+      toast({
+        title: 'Message Sent!',
+        description: 'Thank you for contacting us. We will get back to you soon!',
+        variant: 'default',
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: 'Error',
+        description: 'There was an error sending your message. Please try again later.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -54,8 +125,8 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Phone',
-      details: ['+254 700 000 000', '+254 711 000 000'],
-      action: 'tel:+254700000000'
+      details: ['+254 796 059 968', '+254 794 008 339'],
+      action: 'tel:+254796059968'
     },
     {
       icon: Mail,
@@ -142,7 +213,7 @@ const Contact = () => {
                   Get immediate assistance and real-time updates on your booking
                 </p>
                 <a 
-                  href="https://wa.me/254700000000"
+                  href="https://wa.me/254796059968"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -227,12 +298,22 @@ const Contact = () => {
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
+                  disabled={isLoading}
                   className="w-full luxury-button text-lg py-6 bg-primary hover:bg-primary/90 group"
                 >
-                  Send Message
-                  <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      Send Message
+                      <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </Button>
               </form>
             </CardContent>
