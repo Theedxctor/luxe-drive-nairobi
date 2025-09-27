@@ -21,8 +21,15 @@ const Navigation = () => {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="font-serif text-2xl md:text-3xl font-bold text-primary luxury-transition hover:scale-105">
-            Luxe Drive
+          <Link to="/" className="flex items-center space-x-2 luxury-transition hover:opacity-90">
+            <img 
+              src="/logo.jpeg" 
+              alt="Luxe Drive Logo" 
+              className="h-12 w-12 rounded-full object-cover border-2 border-primary"
+            />
+            <span className="font-serif text-2xl md:text-3xl font-bold text-primary">
+              Luxe Drive
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
