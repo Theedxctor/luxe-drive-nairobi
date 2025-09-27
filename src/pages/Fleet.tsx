@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 // Executive SUVs
 import landCruiserLc200Image from '@/assets/land-cruiser-lc200.jpg';
-import landCruiserLc300Image from '@/assets/land-cruiser-lc300.jpg';
 import landCruiserPradoImage from '@/assets/land-cruiser-prado.jpg';
 import lx570Image from '@/assets/lx570.jpg';
 import mercedesGlcImage from '@/assets/mercedes-glc.jpg';
+import mercedesGleImage from '@/assets/mercedes-gle.jpeg';
 import gWagonImage from '@/assets/g-wagon.jpg';
 import rangeRoverVogueImage from '@/assets/range-rover-vogue.jpg';
 import porscheCayenneImage from '@/assets/porsche-cayenne.jpg';
@@ -17,14 +17,13 @@ import bmwX6Image from '@/assets/bmw-x6.jpg';
 // Luxury Sedans
 import sClassImage from '@/assets/s-class.jpg';
 import mercedesC200Image from '@/assets/mercedes-c200.jpg';
-import toyotaCrownImage from '@/assets/toyota-crown.jpg';
-import toyotaMarkXImage from '@/assets/toyota-mark-x.jpg';
+import toyotaCrownImage from '@/assets/toyota-crown.jpeg';
+import toyotaMarkXImage from '@/assets/toyota-mark-x.jpeg';
 import audiA6Image from '@/assets/audi-a6.jpg';
 
 // Executive Vans & Transfers
 import toyotaAlphardImage from '@/assets/toyota-alphard.jpg';
 import mercedesVClassImage from '@/assets/mercedes-v-class.jpg';
-import mercedesSprinterImage from '@/assets/mercedes-sprinter.jpg';
 
 const Fleet = () => {
   const categories = [
@@ -40,14 +39,6 @@ const Fleet = () => {
           style: 'Legendary Durability',
           occasions: 'Safari Luxury, VIP Events, Corporate Travel',
           features: ['V8 Engine', 'Off-Road Capable', 'Premium Interior']
-        },
-        {
-          name: 'Toyota Land Cruiser LC300',
-          image: landCruiserLc300Image,
-          seats: '8 Passengers', 
-          style: 'Modern Excellence',
-          occasions: 'Executive Travel, Safari Tours, Airport Transfers',
-          features: ['Hybrid Engine', 'Advanced Safety', 'Luxury Comfort']
         },
         {
           name: 'Toyota Land Cruiser Prado J150',
@@ -101,9 +92,17 @@ const Fleet = () => {
           name: 'BMW X6',
           image: bmwX6Image,
           seats: '5 Passengers',
-          style: 'Athletic Luxury',
-          occasions: 'Executive Travel, Corporate Events, City Tours',
-          features: ['Dynamic Design', 'Premium Technology', 'Sport Performance']
+          style: 'Sports Activity Coupe',
+          occasions: 'Executive Travel, Business Meetings, Special Events',
+          features: ['Sporty Design', 'Luxury Interior', 'Dynamic Performance']
+        },
+        {
+          name: 'Mercedes-Benz GLE',
+          image: mercedesGleImage,
+          seats: '5 Passengers',
+          style: 'Luxury SUV',
+          occasions: 'Executive Travel, Family Outings, Business Meetings',
+          features: ['Spacious Interior', 'Advanced Technology', 'Premium Comfort']
         }
       ]
     },
@@ -174,14 +173,6 @@ const Fleet = () => {
           style: 'Luxury MPV',
           occasions: 'Group Travel, Airport Transfers, Corporate Events',
           features: ['Premium Interior', 'Advanced Safety', 'Flexible Seating']
-        },
-        {
-          name: 'Mercedes Sprinter',
-          image: mercedesSprinterImage,
-          seats: '12+ Passengers',
-          style: 'Premium Transport',
-          occasions: 'Airport Transfers, Group VIP, Corporate Shuttles',
-          features: ['High Capacity', 'Comfortable Seating', 'Luggage Space']
         }
       ]
     }

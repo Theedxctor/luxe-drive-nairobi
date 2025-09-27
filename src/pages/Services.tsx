@@ -39,7 +39,6 @@ const Services = () => {
       description: 'Professional transportation solutions for businesses and executives',
       features: [
         'Dedicated account management',
-        'Monthly billing and reporting',
         'Executive-level vehicles',
         'Professionally trained chauffeurs',
         'Confidentiality and discretion assured',
