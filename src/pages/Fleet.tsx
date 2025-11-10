@@ -202,7 +202,7 @@ const Fleet = () => {
                     <div className="relative flex-1">
                       <div className="relative w-full h-64 overflow-hidden bg-gray-100">
                         <img 
-                          src={`/src/assets${vehicle.imageUrls?.[0] || '/images/vehicle-placeholder.jpg'}`} 
+                          src={`/images/vehicles/${vehicle.imageUrls?.[0]?.split('/').pop() || 'vehicle-placeholder.jpg'}`} 
                           alt={`${vehicle.make} ${vehicle.model}`}
                           className="absolute inset-0 w-full h-full object-cover object-center"
                           style={{

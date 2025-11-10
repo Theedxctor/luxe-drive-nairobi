@@ -16,6 +16,118 @@ Luxe Drive Nairobi is a premium car rental platform offering luxury vehicles for
 - 🔒 **Secure Authentication**: Firebase authentication for secure user accounts
 - 📊 **Admin Dashboard**: Manage bookings, vehicles, and users with ease
 
+## 🚀 Deployment Guide
+
+### Prerequisites
+- Node.js 16+ and npm 8+ or Yarn
+- SSH access to your server
+- Nginx installed on the server
+- Domain name pointed to your server's IP
+
+### 1. Build the Project
+
+First, build the production version of your application:
+
+```bash
+# Install dependencies
+npm install
+
+# Build for production
+npm run build
+```
+
+This will create a `dist` directory with all the production-ready files.
+
+### 2. Deploy to Server
+
+#### Option 1: Manual Deployment
+
+1. **Copy files to server**:
+   ```bash
+   scp -i ~/.ssh/vps-lab_key.pem -r /path/to/luxe-drive-nairobi/dist/* keith_austine@102.37.217.64:~/dist/
+   ```
+
+2. **SSH into your server**:
+   ```bash
+   ssh -i ~/.ssh/vps-lab_key.pem keith_austine@102.37.217.64
+   ```
+
+3. **Move files to web directory**:
+   ```bash
+   sudo cp -r ~/dist/* /var/www/html/
+   sudo chown -R www-data:www-data /var/www/html
+   sudo chmod -R 755 /var/www/html
+   ```
+
+#### Option 2: Automated Deployment Script
+
+1. Make the deployment script executable:
+   ```bash
+   chmod +x deploy.sh
+   ```
+
+2. Run the deployment script:
+   ```bash
+   ./deploy.sh
+   ```
+
+### 3. Nginx Configuration
+
+Create a new Nginx configuration file for your site:
+
+```bash
+sudo nano /etc/nginx/sites-available/luxedrivekenya.me
+```
+
+Add the following configuration (adjust as needed):
+
+```nginx
+server {
+    listen 80;
+    listen [::]:80;
+    server_name luxedrivekenya.me www.luxedrivekenya.me;
+
+    root /var/www/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Enable gzip compression
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+    # Cache static assets
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, no-transform";
+    }
+}
+```
+
+Enable the site and test the configuration:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/luxedrivekenya.me /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+### 4. Set Up SSL with Let's Encrypt
+
+```bash
+# Install Certbot
+sudo apt update
+sudo apt install certbot python3-certbot-nginx
+
+# Obtain and install certificate
+sudo certbot --nginx -d luxedrivekenya.me -d www.luxedrivekenya.me
+
+# Test automatic renewal
+sudo certbot renew --dry-run
+```
+
 ## 🚀 Getting Started
 
 ### Prerequisites
