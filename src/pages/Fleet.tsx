@@ -293,7 +293,7 @@ const Fleet = () => {
                           </Button>
                           <Button 
                             className="w-full"
-                            onClick={() => navigate('/booking', { 
+                            onClick={() => navigate('/quote', { 
                               state: { 
                                 vehicleId: vehicle.id,
                                 vehicleName: `${vehicle.make} ${vehicle.model}`,
